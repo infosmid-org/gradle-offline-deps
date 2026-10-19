@@ -15,10 +15,6 @@ repositories {
     mavenCentral()
 }
 
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
 
 tasks.withType(JavaCompile).configureEach {
     // Gradle 8 and 9 both run on Java 17+
