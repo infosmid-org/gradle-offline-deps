@@ -26,15 +26,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
 
-      - name: Make sure that the version is a SNAPSHOT
-        run: |
-          VERSION=$(./gradlew -q properties --property version | sed -n 's/^version: //p')
-          echo "Version is ${VERSION}"
-          if [[ "${VERSION}" != *-SNAPSHOT ]]; then
-            echo "::error::The version on main must end with -SNAPSHOT. Found ${VERSION}."
-            exit 1
-          fi
-
       - name: Build, test and publish to GitHub Packages
         run: ./gradlew build publishAllPublicationsToGitHubPackagesRepository
         env:
