@@ -1,0 +1,104 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    alias(libs.plugins.maven.publish)
+}
+
+group = 'org.infosmid.plugins'
+def getVersionFromFile() {
+    def versionFile = new File(rootProject.projectDir, 'version.txt')
+    return versionFile.text.trim()
+}
+version = providers.gradleProperty('releaseVersion').getOrNull() ?: getVersionFromFile()
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // Gradle 8 and 9 both run on Java 17+
+    options.release = 17
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+gradlePlugin {
+    plugins {
+        gradleOfflineDeps {
+            id = 'org.infosmid.plugins.gradle-offline-deps'
+            implementationClass = 'org.infosmid.plugins.gradle.offlinedeps.GradleOfflineDepsPlugin'
+            displayName = 'Gradle Offline Dependencies'
+            description = 'Resolves the dependencies of all configurations of a project and its subprojects and copies them to a local Maven repository.'
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri("https://maven.pkg.github.com/infosmid-org/${rootProject.name}")
+            credentials {
+                username = providers.environmentVariable('GITHUB_ACTOR').getOrElse('')
+                password = providers.environmentVariable('GITHUB_TOKEN').getOrElse('')
+            }
+        }
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral()
+    if (providers.gradleProperty('signingInMemoryKey').isPresent()) {
+        signAllPublications()
+    }
+    coordinates(project.group.toString(), rootProject.name, project.version.toString())
+    pom {
+        name = 'Stream Deployer'
+        description = project.description
+        inceptionYear = '2026'
+        url = "https://github.com/infosmid-org/${rootProject.name}"
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution = 'repo'
+            }
+        }
+        developers {
+            developer {
+                id = 'corneil'
+                name = 'Corneil du Plessis'
+                url = 'https://github.com/corneil'
+            }
+        }
+        scm {
+            url = "https://github.com/infosmid-org/${rootProject.name}"
+            connection = "scm:git:git://github.com/infosmid-org/${rootProject.name}.git"
+            developerConnection = "scm:git:ssh://git@github.com/infosmid-org/${rootProject.name}.git"
+        }
+        issueManagement {
+            system = 'GitHub'
+            url = "https://github.com/infosmid-org/${rootProject.name}/issues"
+        }
+    }
+}
+
+
+tasks.named('test') {
+    useJUnitPlatform()
+    // Gradle 8.x does not run on the newest JDKs, so run the nested builds on Java 21
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+    testLogging { exceptionFormat = 'full' }
+    // functional tests start nested builds
+    systemProperty 'testGradleVersions', providers.gradleProperty('testGradleVersions').getOrElse('8.14,9.8.0,current')
+}
