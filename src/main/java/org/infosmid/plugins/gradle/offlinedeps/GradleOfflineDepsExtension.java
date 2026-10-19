@@ -29,15 +29,25 @@ import org.gradle.api.provider.Property;
 public abstract class GradleOfflineDepsExtension {
 
     /**
+     * Constructs a new {@code GradleOfflineDepsExtension}.
+     */
+    public GradleOfflineDepsExtension() {
+    }
+
+    /**
      * Directory of the Maven repository that receives the dependencies.
      * Defaults to {@code ~/.m2/repository}. A relative path is resolved against the root project directory
      * and a leading {@code ~/} is expanded to the user home.
+     *
+     * @return the property that contains the Maven repository path
      */
     public abstract Property<String> getMavenLocalPath();
 
     /**
      * Whether the {@code buildscript} configurations (plugin classpath declared in {@code buildscript {}}) are
      * included. Defaults to {@code true}.
+     *
+     * @return the property that specifies if buildscript configurations are included
      */
     public abstract Property<Boolean> getIncludeBuildscript();
 }

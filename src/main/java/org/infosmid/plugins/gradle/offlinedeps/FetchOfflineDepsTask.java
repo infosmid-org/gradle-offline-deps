@@ -47,11 +47,19 @@ import java.util.Set;
 @UntrackedTask(because = "Copies resolved artifacts to a directory outside the project that may change independently")
 public abstract class FetchOfflineDepsTask extends DefaultTask {
 
-    /** Target Maven repository directory. */
+    /**
+     * Target Maven repository directory.
+     *
+     * @return the property that contains the target repository directory path
+     */
     @Internal
     public abstract Property<String> getMavenLocalPath();
 
-    /** Whether to include the {@code buildscript} configurations. */
+    /**
+     * Whether to include the {@code buildscript} configurations.
+     *
+     * @return the property that specifies if buildscript configurations are included
+     */
     @Internal
     public abstract Property<Boolean> getIncludeBuildscript();
 
@@ -59,6 +67,9 @@ public abstract class FetchOfflineDepsTask extends DefaultTask {
     // configurations of its project when it runs, so it is declared incompatible with the configuration cache.
     private final Project project;
 
+    /**
+     * Constructs a new {@code FetchOfflineDepsTask}.
+     */
     public FetchOfflineDepsTask() {
         this.project = getProject();
         setGroup("build setup");
@@ -66,6 +77,9 @@ public abstract class FetchOfflineDepsTask extends DefaultTask {
         notCompatibleWithConfigurationCache("Resolves configurations of the project at execution time.");
     }
 
+    /**
+     * Resolves dependencies across all configurations and copies them to the target Maven repository.
+     */
     @TaskAction
     public void fetch() {
         OfflineRepository repository = new OfflineRepository(resolveTarget(project, getMavenLocalPath().get()));

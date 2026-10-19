@@ -28,9 +28,26 @@ import org.jspecify.annotations.NonNull;
  */
 @SuppressWarnings("unused")
 public class GradleOfflineDepsPlugin implements Plugin<Project> {
+    /**
+     * The name of the extension registered by this plugin.
+     */
     public static final String EXTENSION_NAME = "gradleOfflineDeps";
+
+    /**
+     * The name of the task registered by this plugin.
+     */
     public static final String TASK_NAME = "fetchOfflineDeps";
+
+    /**
+     * The default path to the local Maven repository.
+     */
     public static final String DEFAULT_REPOSITORY = System.getProperty("user.home") + "/.m2/repository";
+
+    /**
+     * Constructs a new {@code GradleOfflineDepsPlugin}.
+     */
+    public GradleOfflineDepsPlugin() {
+    }
 
     @Override
     public void apply(@NonNull Project project) {
