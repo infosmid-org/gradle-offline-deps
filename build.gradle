@@ -36,11 +36,11 @@ gradlePlugin {
     website.set('https://github.com/infosmid-org/gradle-offline-deps')
     vcsUrl.set('https://github.com/infosmid-org/gradle-offline-deps')
     plugins {
-        gradleOfflineDeps {
-            id = 'org.infosmid.plugins.gradle-offline-deps'
+        register('org.infosmid.plugins.gradle-offline-deps') {
             implementationClass = 'org.infosmid.plugins.gradle.offlinedeps.GradleOfflineDepsPlugin'
             displayName = projectName
             description = projectDescription
+            tags.set(['offline', 'dependencies', 'maven'])
         }
     }
 }
