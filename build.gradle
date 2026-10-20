@@ -11,6 +11,7 @@ def getVersionFromFile() {
 }
 version = providers.gradleProperty('releaseVersion').getOrNull() ?: getVersionFromFile()
 description = 'Resolves the dependencies of all configurations of a project and its subprojects and copies them to a local Maven repository.'
+def projectName = 'Gradle Offline Dependencies Plugin'
 def projectDescription = project.description
 
 repositories {
@@ -35,7 +36,7 @@ gradlePlugin {
         gradleOfflineDeps {
             id = 'org.infosmid.plugins.gradle-offline-deps'
             implementationClass = 'org.infosmid.plugins.gradle.offlinedeps.GradleOfflineDepsPlugin'
-            displayName = 'Gradle Offline Dependencies'
+            displayName = projectName
             description = projectDescription
         }
     }
@@ -61,7 +62,7 @@ mavenPublishing {
     }
     coordinates(project.group.toString(), rootProject.name, project.version.toString())
     pom {
-        name = 'Stream Deployer'
+        name = projectName
         description = projectDescription
         inceptionYear = '2026'
         url = "https://github.com/infosmid-org/${rootProject.name}"
