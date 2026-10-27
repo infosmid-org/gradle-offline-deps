@@ -1,6 +1,6 @@
 # Gradle Offline Dependencies Plugin
 
-[![Build Status](https://github.com/infosmid-org/gradle-offline-deps/actions/workflows/publish-snapshot.yml/badge.svg)](https://github.com/infosmid-org/gradle-offline-deps/actions/workflows/publish-snapshot.yml)
+[![Build Status](https://github.com/infosmid-org/gradle-offline-deps/actions/workflows/snapshot.yml/badge.svg)](https://github.com/infosmid-org/gradle-offline-deps/actions/workflows/snapshot.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/org.infosmid.plugins/gradle-offline-deps.svg)](https://central.sonatype.com/artifact/org.infosmid.plugins/gradle-offline-deps)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
